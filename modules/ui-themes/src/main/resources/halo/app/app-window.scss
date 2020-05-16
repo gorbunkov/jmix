@@ -299,7 +299,6 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
     .c-workarea {
       flex-grow: 1;
       flex-shrink: 1;
-      min-width: 100px;
     }
 
     .c-sidemenu-container {
@@ -323,7 +322,6 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
 
       display: flex;
       flex-direction: column;
-      align-items: center;
 
       overflow: hidden;
 
@@ -385,6 +383,10 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
       margin-right: $v-layout-spacing-horizontal;
     }
 
+    .c-sidemenu > .c-sidemenu-item-header {
+      width: 100%;
+    }
+
     .c-sidemenu-controls {
       display: flex;
       align-items: center;
@@ -394,10 +396,6 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
       height: $cuba-sidemenu-layout-collapsed-width;
       background-color: #3b3b3b;
 
-      @if $cuba-sidemenu-layout-collapse-enabled == false {
-        display: none;
-      }
-
       & > * {
         flex-shrink: 0;
 
@@ -405,7 +403,7 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
       }
     }
 
-    .c-sidemenu-collapse {
+    .c-sidemenu-collapse-button {
       $bg-color: #2b2b2b;
 
       width: $cuba-sidemenu-layout-collapsed-width;
@@ -435,9 +433,13 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
         bottom: 0;
         left: 0;
       }
+
+      @if $cuba-sidemenu-layout-collapse-enabled == false {
+        display: none;
+      }
     }
 
-    .c-sidemenu-controls .c-userindicator {
+    .c-userindicator {
       width: $cuba-sidemenu-layout-expanded-width - 3 * $cuba-sidemenu-layout-collapsed-width;
       padding: 0 $v-layout-spacing-horizontal;
 
@@ -447,13 +449,21 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
       & > .v-label {
         width: 100%;
         overflow: hidden;
+        text-align: center;
       }
     }
 
-    .c-sidemenu-controls .c-settings-button,
-    .c-sidemenu-controls .c-logout-button {
+    .c-settings-button,
+    .c-logout-button,
+    .c-login-button {
       width: $cuba-sidemenu-layout-collapsed-width;
       height: $cuba-sidemenu-layout-collapsed-width;
+
+      color: $cuba-menubar-text-color;
+
+      background: none;
+      border: none;
+      box-shadow: none;
 
       &::after {
         top: 0;
@@ -461,18 +471,30 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
         bottom: 0;
         left: 0;
       }
-    }
-
-    .c-sidemenu-controls .c-settings-button {
-      color: $cuba-menubar-text-color;
-
-      background: none;
-      border: none;
-      box-shadow: none;
 
       &:hover {
         color: $cuba-menubar-menuitem-text-selected-color;
       }
+    }
+
+    .c-settings-button,
+    .c-logout-button {
+      display: none;
+    }
+
+    .c-logout-button,
+    .c-login-button {
+      margin-left: auto;
+    }
+
+    // show settings and logout button only when user indicator is visible i.e. when user is authenticated
+    .c-userindicator ~ .c-settings-button,
+    .c-userindicator ~ .c-logout-button {
+      display: block;
+    }
+
+    .c-userindicator ~ .c-login-button {
+      display: none;
     }
   }
 }
@@ -488,6 +510,7 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
       padding: 0;
 
       .c-sidemenu-item-wrap {
+        width: $cuba-sidemenu-layout-collapsed-width;
         text-align: center;
       }
 
@@ -511,14 +534,6 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
         @include transition (max-height $cuba-sidemenu-layout-collapse-animation-time ease-in-out);
       }
     }
-
-    .c-sidemenu-title .v-label {
-      display: none;
-    }
-
-    .c-app-icon {
-      margin-right: 0;
-    }
   } @else {
     .c-sidemenu {
       overflow-y: auto;
@@ -528,6 +543,7 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
       padding: 0 $v-unit-size 0 round($v-unit-size / 2);
 
       .c-sidemenu-item-wrap {
+        width: 100%;
         text-align: left;
       }
 
@@ -549,14 +565,6 @@ $cuba-sidemenu-layout-collapse-animation-time: .3s !default;
       @if $v-animations-enabled {
         @include transition (max-height .9s ease-in-out);
       }
-    }
-
-    .c-sidemenu-title .v-label {
-      display: inline-block;
-    }
-
-    .c-app-icon {
-      margin-right: $v-layout-spacing-horizontal;
     }
   }
 }
