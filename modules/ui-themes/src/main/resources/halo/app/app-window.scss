@@ -300,6 +300,7 @@ $cuba-sidemenu-layout-collapse-animation-time: .4s !default;
       flex-grow: 1;
       flex-shrink: 1;
       z-index: 0;
+      min-width: 100px;
     }
 
     .c-sidemenu-container {
@@ -310,7 +311,7 @@ $cuba-sidemenu-layout-collapse-animation-time: .4s !default;
         @include transition(width $cuba-sidemenu-layout-collapse-animation-time ease-in-out);
       }
 
-      z-index: 0;
+      z-index: 1;
     }
 
     .c-sidemenu-container.collapsed {
