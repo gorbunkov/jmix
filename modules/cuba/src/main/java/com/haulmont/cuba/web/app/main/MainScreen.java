@@ -164,11 +164,6 @@ public class MainScreen extends Screen implements Window.HasWorkArea, Window.Has
                 .openDefaultScreen(screens);
     }
 
-    @Subscribe
-    public void onAfterDetach(AfterDetachEvent event) {
-        saveSideMenuState();
-    }
-
     @Nullable
     @Override
     public AppWorkArea getWorkArea() {
@@ -266,19 +261,6 @@ public class MainScreen extends Screen implements Window.HasWorkArea, Window.Has
         return sideMenuPanel != null
                 && sideMenuPanel.getStyleName() != null
                 && sideMenuPanel.getStyleName().contains(SIDEMENU_COLLAPSED_STYLENAME);
-    }
-
-    protected void saveSideMenuState() {
-        CssLayout sideMenuPanel = (CssLayout) getWindow().getComponent("sideMenuPanel");
-        if (sideMenuPanel != null) {
-            /* todo user settings
-            boolean collapsed = sideMenuPanel.getStyleName().contains(SIDEMENU_COLLAPSED_STYLENAME);
-
-            UserSettingService userSettings = getBeanLocator()
-                    .get(UserSettingService.class);
-
-            userSettings.saveSetting(ClientType.WEB, SIDEMENU_COLLAPSED_STATE, String.valueOf(collapsed));*/
-        }
     }
 
     protected boolean isMobileDevice() {
