@@ -24,6 +24,7 @@ import io.jmix.ui.components.*;
 import io.jmix.ui.xml.layout.BaseLoaderConfig;
 import io.jmix.ui.xml.layout.ComponentLoader;
 import io.jmix.ui.xml.layout.LoaderConfig;
+import io.jmix.ui.xml.layout.loaders.FragmentComponentLoader;
 import org.dom4j.Element;
 import org.springframework.stereotype.Component;
 
@@ -47,6 +48,8 @@ public class CubaLoaderConfig extends BaseLoaderConfig implements LoaderConfig {
     @Override
     protected void initStandardLoaders() {
         super.initStandardLoaders();
+
+        loaders.put("frame", FragmentComponentLoader.class);
 
         loaders.put(Calendar.NAME, CubaCalendarLoader.class);
         loaders.put(Tree.NAME, CubaTreeLoader.class);
