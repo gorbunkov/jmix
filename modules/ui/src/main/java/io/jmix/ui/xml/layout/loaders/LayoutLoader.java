@@ -86,10 +86,10 @@ public class LayoutLoader {
         return initLoader(element, loaderClass);
     }
 
-    protected FragmentLoader getFragmentLoader(Element element) {
-        Class<? extends ComponentLoader> loaderClass = config.getFragmentLoader();
+    protected FragmentLoader getFragmentLoader(Element rootWindowElement) {
+        Class<? extends ComponentLoader> loaderClass = loaderResolver.getFragmentLoader(rootWindowElement);
 
-        return (FragmentLoader) initLoader(element, loaderClass);
+        return (FragmentLoader) initLoader(rootWindowElement, loaderClass);
     }
 
     protected WindowLoader getWindowLoader(Element element) {

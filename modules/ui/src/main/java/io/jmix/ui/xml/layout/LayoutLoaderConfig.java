@@ -53,7 +53,8 @@ public class LayoutLoaderConfig extends BaseLoaderConfig implements LoaderConfig
             return window.attribute("class") == null;
         }
         // is fragment
-        return getRootElement("fragment", element) != null;
+        return getRootElement("fragment", element) != null
+                || "fragment".equals(element.getName());
     }
 
     /**
@@ -70,8 +71,12 @@ public class LayoutLoaderConfig extends BaseLoaderConfig implements LoaderConfig
         return windowLoader;
     }
 
-    public Class<? extends ComponentLoader> getFragmentLoader() {
-        return fragmentLoader;
+    @Override
+    public Class<? extends ComponentLoader> getFragmentLoader(Element root) {
+        if (isNotLegacyScreen(root))
+            return fragmentLoader;
+
+        return null;
     }
 
     public Class<? extends ComponentLoader> getLoader(String name) {
@@ -91,11 +96,11 @@ public class LayoutLoaderConfig extends BaseLoaderConfig implements LoaderConfig
     }
 
     @Nullable
-    protected Element getRootElement(String parentName, Element child) {
+    protected Element getRootElement(String rootName, Element child) {
         Element parent = child.getParent();
 
         while (parent != null
-                && !parentName.equals(parent.getName())) {
+                && !rootName.equals(parent.getName())) {
             parent = parent.getParent();
         }
 
