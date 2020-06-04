@@ -684,9 +684,13 @@ public abstract class WebAbstractDataGrid<C extends Grid<E> & JmixEnhancedGrid<E
 
     @Override
     public Column<E> addColumn(String id, MetaPropertyPath propertyPath, int index) {
-        ColumnImpl<E> column = new ColumnImpl<>(id, propertyPath, this);
+        ColumnImpl<E> column = createColumn(id, propertyPath, this);
         addColumnInternal(column, index);
         return column;
+    }
+
+    protected ColumnImpl<E> createColumn(String id, @Nullable MetaPropertyPath propertyPath, WebAbstractDataGrid<?, E> owner) {
+        return new ColumnImpl<>(id, propertyPath, owner);
     }
 
     protected void addColumnInternal(ColumnImpl<E> column, int index) {
@@ -1021,7 +1025,7 @@ public abstract class WebAbstractDataGrid<C extends Grid<E> & JmixEnhancedGrid<E
             if (!property.getRange().getCardinality().isMany()
                     && !metadataTools.isSystem(property)) {
                 String propertyName = property.getName();
-                ColumnImpl<E> column = new ColumnImpl<>(propertyName, metaPropertyPath, this);
+                ColumnImpl<E> column = createColumn(propertyName, metaPropertyPath, this);
                 MetaClass propertyMetaClass = metadataTools.getPropertyEnclosingMetaClass(metaPropertyPath);
                 column.setCaption(messageTools.getPropertyCaption(propertyMetaClass, propertyName));
 
@@ -2625,7 +2629,7 @@ public abstract class WebAbstractDataGrid<C extends Grid<E> & JmixEnhancedGrid<E
                 component.addColumn(createGeneratedColumnValueProvider(columnId, generator));
 
         // Pass propertyPath from the existing column to support sorting
-        ColumnImpl<E> column = new ColumnImpl<>(columnId,
+        ColumnImpl<E> column = createColumn(columnId,
                 existingColumn != null ? existingColumn.getPropertyPath() : null,
                 this);
         if (existingColumn != null) {
