@@ -16,6 +16,9 @@
 
 package security
 
+import io.jmix.core.security.UserRepository
+import io.jmix.core.security.authentication.CoreAuthentication
+import io.jmix.core.security.impl.CoreUser
 import test_support.addon1.TestAddon1Configuration
 import test_support.AppContextTestExecutionListener
 import io.jmix.core.JmixCoreConfiguration
@@ -49,6 +52,9 @@ class CoreSecurityImplTest extends Specification {
     @Autowired
     AuthenticationManager authenticationManager
 
+    @Autowired
+    UserRepository userRepository
+
     def "Security impl is default"() {
         expect:
 
@@ -56,7 +62,11 @@ class CoreSecurityImplTest extends Specification {
     }
 
     def "authentication as admin"() {
+
         when:
+
+        def admin = new CoreUser('admin', '{noop}admin123', 'Admin')
+        userRepository.createUser(admin)
 
         def authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken('admin', 'admin123'))
@@ -64,6 +74,7 @@ class CoreSecurityImplTest extends Specification {
         then:
 
         authentication != null
+        authentication instanceof CoreAuthentication
 
         when:
 
@@ -74,6 +85,10 @@ class CoreSecurityImplTest extends Specification {
 
         def e = thrown(AuthenticationException)
         e instanceof BadCredentialsException
+
+        cleanup:
+
+        userRepository.removeUser(admin)
     }
 
     // todo forbid using UsernamePasswordAuthenticationToken for system user
