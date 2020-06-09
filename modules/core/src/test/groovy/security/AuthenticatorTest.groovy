@@ -19,7 +19,9 @@ package security
 import io.jmix.core.JmixCoreConfiguration
 import io.jmix.core.entity.BaseUser
 import io.jmix.core.security.SystemAuthenticationToken
+import io.jmix.core.security.UserRepository
 import io.jmix.core.security.impl.AuthenticatorImpl
+import io.jmix.core.security.impl.CoreUser
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ContextConfiguration
@@ -38,6 +40,21 @@ class AuthenticatorTest extends Specification {
 
     @Autowired
     AuthenticatorImpl authenticator
+
+    @Autowired
+    UserRepository userRepository
+
+    CoreUser admin
+
+    def setup() {
+        admin = new CoreUser('admin', '{noop}admin123', 'Admin')
+        userRepository.createUser(admin)
+    }
+
+    def cleanup() {
+        userRepository.removeUser(admin)
+    }
+
 
     def "authenticate as system"() {
         when:
